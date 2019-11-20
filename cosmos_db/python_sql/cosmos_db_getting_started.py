@@ -75,7 +75,7 @@ def main( args = None ):
     for item in items:
         print( f'{item["category"]} / {item["name"]}  / {item["description"]} / {item["isComplete"]}' )
 
-    # Query for single item
+    # Query for single item & update it
     query = "SELECT * FROM c WHERE c.name = 'groceries'"
     items = list( container.query_items(
         query                        = query,
@@ -97,6 +97,23 @@ def main( args = None ):
         print( f'Multiple entries matching query...' )
     else:
         print( f'No entry matching query [{query}] in database.' )
+
+    # Insert item into database
+    newItem = getItemObject(
+        name        = "new testitem",
+        description = "Test of inserting an item (document) to the database.",
+        category    = "test"
+    )
+    container.create_item( newItem )
+
+    # List items in database
+    query = "SELECT * FROM c"
+    items = list( container.query_items(
+        query                        = query,
+        enable_cross_partition_query = True
+    ) )
+    for item in items:
+        print( f'{item["category"]} / {item["name"]}  / {item["description"]} / {item["isComplete"]}' )
 
 
     # Request charge for database interaction
